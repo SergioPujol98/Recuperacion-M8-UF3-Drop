@@ -9,10 +9,13 @@ public class Drop extends Game {
 
 	public SpriteBatch batch;
 	public BitmapFont font;
+	public BitmapFont fontDoble;
 
 	public void create() {
 		batch = new SpriteBatch();
 		font = new BitmapFont(); // use libGDX's default Arial font
+		fontDoble = new BitmapFont();
+		fontDoble.getData().setScale(2);
 		this.setScreen(new MainMenuScreen(this));
 	}
 

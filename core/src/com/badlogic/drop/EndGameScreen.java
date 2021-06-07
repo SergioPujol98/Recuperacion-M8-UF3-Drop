@@ -2,19 +2,27 @@ package com.badlogic.drop;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class MainMenuScreen implements Screen {
 
+public class EndGameScreen implements Screen {
     final Drop game;
+
+    private TextureRegion region;
     Texture background;
     OrthographicCamera camera;
+    int contador;
 
-    public MainMenuScreen(final Drop game) {
+    public EndGameScreen(Drop game, int dropsGathered) {
         this.game = game;
-        background = new Texture(Gdx.files.internal("inicio.png"));
+        this.contador = dropsGathered;
+
+
+        background = new Texture(Gdx.files.internal("gameover.png"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -27,25 +35,29 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0.2f, 1);
 
+        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // tell the camera to update its matrices.
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-
 
         game.batch.begin();
         game.batch.draw(background, 0, 0, 800, 480);
         game.batch.end();
 
         game.batch.begin();
-        game.font.draw(game.batch, "Bienvenido a Drop! ", 350, 450);
-        game.font.draw(game.batch, "Pulsar!", 200, 150);
+        game.fontDoble.draw(game.batch, "Puntos obtenidos: " + contador, 10, 100);
         game.batch.end();
 
+        //Volver a empezar el juego
         if (Gdx.input.isTouched()) {
             game.setScreen(new GameScreen(game));
             dispose();
         }
+
+
+
     }
 
     @Override
@@ -72,8 +84,5 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
 
     }
-
-
-    //...Rest of class omitted for succinctness.
-
 }
+
